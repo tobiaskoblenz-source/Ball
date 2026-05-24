@@ -72,3 +72,15 @@ Hintergrundbild:
 - Stadionbild als echter Hintergrund eingebaut
 - Live-Ticker, Footer und Panels näher am Referenzdesign
 - große zusätzliche Fußballgrafik unten links entfernt, damit es dem Vorbild entspricht
+
+
+Neues Update:
+- Länderflaggen jetzt als echte Länderflaggen eingebaut (nicht mehr nur Team-Logos)
+- Abstände und Layout näher am Referenzbild angepasst
+- API robuster gemacht: Timeout, bessere Fehlermeldung, /health erweitert
+- Wenn die API nicht antwortet, siehst du weiter Demo-Daten plus Hinweis im Ticker und bei Letztes Update
+
+API prüfen:
+1. /health öffnen → hasApiKey muss true sein
+2. /api/wm2026 öffnen → wenn warning kommt, stimmt Key/Tarif/Saison noch nicht
+3. Auf API-Football muss dein Tarif die WM 2026 Fixtures erlauben
