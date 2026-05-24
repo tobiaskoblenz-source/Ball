@@ -61,3 +61,14 @@ TV-Look Upgrade:
 - größere Header und klarere Panels
 - neues großes Countdown-Panel im TV-Stil
 - Live-Ticker im unteren Bereich
+
+Hintergrundbild:
+- Stadion-Hintergrundbild im TV-Look eingebaut
+- Datei public/stadium-bg.png hinzugefügt
+- Hintergrund entspricht nun dem Vorschaubild deutlich stärker
+
+1:1 Screenshot-Look:
+- Layout weiter auf das gelieferte Vorschaubild angepasst
+- Stadionbild als echter Hintergrund eingebaut
+- Live-Ticker, Footer und Panels näher am Referenzdesign
+- große zusätzliche Fußballgrafik unten links entfernt, damit es dem Vorbild entspricht
