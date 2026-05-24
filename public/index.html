@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WM 2026 TV Spielplan</title>
+<style>
+:root{
+  --bg:#020912;
+  --panel:#07192d;
+  --panel2:#0a213b;
+  --panel3:#03111f;
+  --line:rgba(255,255,255,.12);
+  --gold:#f3bf3d;
+  --gold2:#9a6a09;
+  --white:#f7fbff;
+  --muted:#b9c8d8;
+  --green:#22d07a;
+  --red:#ff3e42;
+  --blue:#2aa5ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--white);font-family:Inter,Arial,Helvetica,sans-serif}
+body{
+  background:
+    radial-gradient(circle at 50% 18%, rgba(28,87,171,.25), transparent 28%),
+    linear-gradient(180deg,#020912 0%,#061629 44%,#07150d 100%);
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-3;
+  background:
+    radial-gradient(circle at 8% 16%, rgba(255,255,255,.55), transparent 7%),
+    radial-gradient(circle at 92% 16%, rgba(255,255,255,.55), transparent 7%),
+    radial-gradient(circle at 10% 18%, rgba(75,145,255,.22), transparent 23%),
+    radial-gradient(circle at 90% 18%, rgba(75,145,255,.22), transparent 23%);
+}
+body:after{
+  content:"";position:fixed;left:0;right:0;bottom:0;height:260px;pointer-events:none;z-index:-2;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 95px),
+    linear-gradient(180deg,transparent,rgba(34,129,32,.88));
+  transform:perspective(760px) rotateX(62deg);transform-origin:bottom;
+}
+.stadiumGlow{position:fixed;inset:0;pointer-events:none;z-index:-1;background:
+  radial-gradient(ellipse at 50% 86%,rgba(255,255,255,.28),transparent 24%),
+  radial-gradient(ellipse at 50% 78%,rgba(70,215,87,.18),transparent 30%),
+  linear-gradient(90deg,transparent 4%, rgba(243,191,61,.18) 5%, transparent 5.8%, transparent 94.2%, rgba(243,191,61,.18) 95%, transparent 96%);
+}
+.ball{position:fixed;left:-36px;bottom:74px;width:168px;height:168px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#c7d0d8 58%,#25303d 100%);box-shadow:0 0 50px rgba(255,255,255,.18);opacity:.92;z-index:1}
+.ball:before{content:"⚽";position:absolute;inset:0;display:grid;place-items:center;font-size:136px}
+.wrap{height:100vh;padding:24px 28px 14px;display:grid;grid-template-rows:108px 1fr 52px 40px;gap:10px}
+header{display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:start}
+.titleWrap{display:flex;flex-direction:column;justify-content:center}
+h1{margin:0;font-size:72px;line-height:.9;font-weight:1000;letter-spacing:-3px;font-style:italic;text-shadow:0 4px 24px rgba(0,0,0,.45)}
+h1 span{color:var(--gold);text-shadow:0 0 22px rgba(243,191,61,.18)}
+.subtitle{margin-top:8px;font-size:18px;color:#ecf5ff;letter-spacing:.4px}
+.glassPanel{border:1px solid rgba(255,255,255,.16);background:linear-gradient(180deg,rgba(12,34,61,.92),rgba(3,13,24,.96));box-shadow:0 12px 42px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);border-radius:16px}
+.clockPanel{justify-self:end;width:410px;height:100px;padding:14px 22px;display:flex;align-items:center;justify-content:center;gap:18px;clip-path:polygon(10% 0,100% 0,94% 100%,0 100%);border-radius:0}
+.clockIcon{width:68px;height:68px;border:4px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-size:30px;color:var(--gold);box-shadow:0 0 16px rgba(243,191,61,.15)}
+.time{font-size:54px;font-weight:1000;letter-spacing:-1px}
+.date{font-size:18px;color:#f3f8fe;margin-top:2px}
+.main{display:grid;grid-template-columns:1fr 500px;gap:16px;min-height:0}
+.card{overflow:hidden;border-radius:16px;border:1px solid rgba(243,191,61,.45);background:linear-gradient(180deg,rgba(8,26,49,.96),rgba(4,14,25,.96));box-shadow:0 18px 54px rgba(0,0,0,.38)}
+.cardTitle{height:58px;display:flex;align-items:center;gap:14px;padding:0 18px;background:linear-gradient(90deg,rgba(243,191,61,.22),rgba(26,77,131,.38) 35%,rgba(5,18,34,.1));border-bottom:1px solid rgba(243,191,61,.32);font-size:25px;font-weight:950;font-style:italic;text-transform:uppercase;letter-spacing:.7px}
+.cardTitle .icon{font-size:28px;color:var(--gold)}
+.schedule{display:flex;flex-direction:column;min-height:0}
+.matchList{height:calc(100% - 58px);overflow:hidden}
+.match{display:grid;grid-template-columns:190px 64px 1fr 120px 1fr 64px 230px;gap:14px;align-items:center;height:76px;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.12);position:relative}
+.match:before{content:"";position:absolute;left:190px;top:15px;bottom:15px;width:1px;background:rgba(243,191,61,.55)}
+.match.live{box-shadow:inset 4px 0 0 var(--red);background:linear-gradient(90deg,rgba(255,62,66,.11),rgba(255,255,255,.015))}
+.match.finished{background:linear-gradient(90deg,rgba(34,208,122,.08),rgba(255,255,255,.01))}
+.kick{font-size:20px;font-weight:850;color:#f2f7fd;display:flex;align-items:center;gap:14px}
+.timeOnly{white-space:nowrap}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:76px;height:36px;padding:0 14px;border-radius:7px;font-size:15px;font-weight:1000;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.badge.live{background:linear-gradient(180deg,#c70e0e,#860000);color:#fff}
+.badge.done{background:linear-gradient(180deg,#179149,#0f5d32);color:#fff}
+.liveMinute{color:#ff4d4d;font-size:20px;font-weight:900}
+.logo{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain}
+.team{font-size:20px;font-weight:900;letter-spacing:-.2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{font-size:28px;font-weight:1000;text-align:center;color:var(--gold)}
+.meta{font-size:14px;color:#edf5ff;line-height:1.28}
+.meta b{display:block;color:var(--gold);font-size:16px;text-transform:uppercase;margin-bottom:2px}
+.side{display:grid;grid-template-rows:294px 1fr;gap:16px;min-height:0}
+.nextCard .body{height:calc(100% - 58px);padding:16px 18px;background:
+  radial-gradient(circle at 50% 22%, rgba(243,191,61,.16), transparent 28%),
+  linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.14));}
+.nextField{height:84px;border:1px solid rgba(243,191,61,.4);border-radius:12px;background:linear-gradient(180deg,rgba(5,30,53,.56),rgba(14,49,14,.3));display:grid;grid-template-columns:1fr 110px 1fr;align-items:center;gap:10px;padding:0 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.bigLogo{height:56px;width:82px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center;overflow:hidden}
+.bigLogo img{width:100%;height:100%;object-fit:contain}
+.teamMini{font-size:18px;font-weight:950;text-transform:uppercase;text-align:center;margin-top:7px}
+.vsBadge{height:58px;border-radius:14px;background:linear-gradient(180deg,#6a4d08,#221a07);display:grid;place-items:center;color:#fff;font-size:24px;font-weight:1000;box-shadow:0 0 22px rgba(243,191,61,.18)}
+.nextInfo{margin-top:14px;font-size:18px;line-height:1.5;color:#f2f8ff}
+.nextInfoRow{display:flex;align-items:flex-start;gap:10px;margin-top:6px}
+.infoIcon{color:#fff;opacity:.9;width:24px;text-align:center}
+.countdownCard .body{height:calc(100% - 58px);padding:14px 16px 16px;background:
+  radial-gradient(circle at 95% 8%, rgba(84,157,255,.22), transparent 17%),
+  linear-gradient(180deg,rgba(7,31,58,.96),rgba(3,16,30,.98));}
+.countdownTop{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:950;font-style:italic;text-transform:uppercase;letter-spacing:.5px}
+.flagBadge{width:50px;height:28px;border-radius:6px;display:grid;place-items:center;background:rgba(255,255,255,.06);font-size:28px;overflow:hidden}
+.countTitle{margin-top:16px;font-size:31px;font-weight:900;text-align:center;letter-spacing:-.5px}
+.countSub{font-size:16px;color:#ecf4ff;text-align:center;margin-top:4px}
+.countGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:18px;border:1px solid rgba(243,191,61,.42);border-radius:12px;overflow:hidden;box-shadow:0 0 24px rgba(243,191,61,.12)}
+.countBox{padding:10px 4px 12px;text-align:center;background:linear-gradient(180deg,rgba(17,21,32,.55),rgba(16,16,16,.28));border-right:1px solid rgba(243,191,61,.22)}
+.countBox:last-child{border-right:0}
+.countBox strong{display:block;font-size:60px;line-height:1;color:var(--gold);text-shadow:0 0 18px rgba(243,191,61,.16)}
+.countBox span{display:block;margin-top:6px;font-size:15px;text-transform:uppercase;color:#eef5ff}
+.countMeta{margin-top:16px;font-size:17px;color:#f6fbff;line-height:1.55}
+.countMetaRow{display:flex;align-items:flex-start;gap:12px;margin-top:6px}
+.countMeta small{color:var(--muted)}
+.ticker{display:grid;grid-template-columns:180px 1fr;align-items:center;border:1px solid rgba(243,191,61,.42);border-radius:12px;overflow:hidden;background:linear-gradient(180deg,rgba(6,22,42,.94),rgba(3,13,23,.98));box-shadow:0 10px 28px rgba(0,0,0,.28)}
+.tickerLabel{height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#c91b0f,#7d0c07);font-size:19px;font-weight:1000;font-style:italic;text-transform:uppercase;letter-spacing:.6px}
+.tickerViewport{height:100%;display:flex;align-items:center;overflow:hidden;position:relative}
+.tickerTrack{display:flex;align-items:center;min-width:max-content;white-space:nowrap;animation:tickerMove 36s linear infinite}
+.tickerItem{display:inline-flex;align-items:center;padding:0 20px;font-size:15px;color:#fff}
+.tickerItem:after{content:"⚽";margin-left:20px;color:#fff;font-size:18px;opacity:.95}
+.tickerItem:last-child:after{content:"";margin:0}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+footer{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;border-top:1px solid rgba(243,191,61,.45);padding-top:6px;font-size:15px;color:#edf6ff;background:linear-gradient(180deg,rgba(4,17,30,.15),rgba(4,17,30,.45))}
+footer div:nth-child(2){text-align:center}
+footer div:nth-child(3){text-align:right}
+footer b{color:var(--gold);letter-spacing:.5px}
+.statusLive{color:var(--red);font-weight:1000}
+.statusDone{color:var(--green);font-weight:1000}
+.statusPlan{color:var(--gold);font-weight:1000}
+@media(max-width:1300px){
+  .wrap{padding:16px;grid-template-rows:98px 1fr 48px 34px}
+  header{grid-template-columns:1fr}.clockPanel{display:none}
+  h1{font-size:52px}.subtitle{font-size:16px}
+  .main{grid-template-columns:1fr}.side{display:none}
+  .match{grid-template-columns:140px 48px 1fr 80px 1fr 48px;height:66px}.meta{display:none}.team{font-size:16px}.score{font-size:24px}
+  .ticker{grid-template-columns:140px 1fr}.tickerLabel{font-size:15px}.tickerItem{font-size:13px}
+  footer{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="stadiumGlow"></div>
+<div class="ball"></div>
+<div class="wrap">
+  <header>
+    <div class="titleWrap">
+      <h1>WM 2026 <span>Spielplan</span></h1>
+      <div class="subtitle">Live-TV-Ansicht &nbsp;•&nbsp; automatisch aktualisiert</div>
+    </div>
+    <div class="glassPanel clockPanel">
+      <div class="clockIcon">◷</div>
+      <div>
+        <div class="time" id="clock">--:--</div>
+        <div class="date" id="date">--</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="main">
+    <div class="card schedule">
+      <div class="cardTitle"><span class="icon">🗓️</span> Nächste Spiele</div>
+      <div class="matchList" id="matchList"></div>
+    </div>
+
+    <aside class="side">
+      <div class="card nextCard">
+        <div class="cardTitle"><span class="icon">🏆</span> Nächstes Spiel</div>
+        <div class="body">
+          <div class="nextField">
+            <div>
+              <div class="bigLogo" id="nextHomeLogo">⚽</div>
+              <div class="teamMini" id="nextHome">Team A</div>
+            </div>
+            <div class="vsBadge">VS</div>
+            <div>
+              <div class="bigLogo" id="nextAwayLogo">⚽</div>
+              <div class="teamMini" id="nextAway">Team B</div>
+            </div>
+          </div>
+          <div class="nextInfo" id="nextInfo">Daten werden geladen...</div>
+        </div>
+      </div>
+
+      <div class="card countdownCard">
+        <div class="cardTitle"><span class="icon">⏳</span> Countdown Deutschland</div>
+        <div class="body">
+          <div class="countdownTop"><span class="flagBadge">🇩🇪</span><span>Nächstes Deutschland-Spiel</span></div>
+          <div class="countTitle" id="gerTitle">Deutschland</div>
+          <div class="countSub" id="gerSub">Suche nächstes Spiel ...</div>
+          <div class="countGrid">
+            <div class="countBox"><strong id="gerDays">--</strong><span>Tage</span></div>
+            <div class="countBox"><strong id="gerHours">--</strong><span>Std.</span></div>
+            <div class="countBox"><strong id="gerMinutes">--</strong><span>Min.</span></div>
+            <div class="countBox"><strong id="gerSeconds">--</strong><span>Sek.</span></div>
+          </div>
+          <div class="countMeta" id="gerMeta">Noch keine Deutschland-Daten geladen.</div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="ticker">
+    <div class="tickerLabel">Live Ticker</div>
+    <div class="tickerViewport">
+      <div class="tickerTrack" id="tickerTrack">
+        <span class="tickerItem">WM 2026 wird geladen ...</span>
+        <span class="tickerItem">WM 2026 wird geladen ...</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>QUELLE:</b> <span id="source">Railway</span></div>
+    <div><b>LETZTES UPDATE:</b> <span id="updated">--</span></div>
+    <div><b>ALLE ZEITEN IN MEZ</b></div>
+  </footer>
+</div>
+
+<script>
+const API_URL = "/api/wm2026";
+const REFRESH_SECONDS = 60;
+const TZ = "Europe/Berlin";
+let allMatches = [];
+
+function clock(){
+  const now = new Date();
+  document.getElementById("clock").textContent = new Intl.DateTimeFormat("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:TZ}).format(now);
+  document.getElementById("date").textContent = new Intl.DateTimeFormat("de-DE",{weekday:"long",day:"2-digit",month:"long",year:"numeric",timeZone:TZ}).format(now);
+}
+setInterval(clock,1000); clock();
+
+function fDate(d){return new Intl.DateTimeFormat("de-DE",{day:"2-digit",month:"2-digit",timeZone:TZ}).format(d)}
+function fTime(d){return new Intl.DateTimeFormat("de-DE",{hour:"2-digit",minute:"2-digit",timeZone:TZ}).format(d)}
+function fDateLong(d){return new Intl.DateTimeFormat("de-DE",{weekday:"short",day:"2-digit",month:"2-digit",year:"numeric",timeZone:TZ}).format(d)}
+function isGermanyTeam(name){
+  const n = String(name || "").trim().toLowerCase();
+  return n === "deutschland" || n === "germany" || n === "ger";
+}
+function getCountdownParts(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const days = Math.floor(total / 86400);
+  const hours = Math.floor((total % 86400) / 3600);
+  const mins = Math.floor((total % 3600) / 60);
+  const secs = total % 60;
+  return {days, hours, mins, secs};
+}
+function logoHtml(url, fallback="⚽"){
+  return url ? `<img src="${url}" alt="">` : fallback;
+}
+function score(m){
+  if(m.homeScore !== null && m.homeScore !== undefined && m.awayScore !== null && m.awayScore !== undefined) return `${m.homeScore}:${m.awayScore}`;
+  return "VS";
+}
+function statusLabel(m){
+  if(m.status === "live") return `<span class="statusLive">LIVE${m.elapsed ? " · " + m.elapsed + "'" : ""}</span>`;
+  if(m.status === "finished") return `<span class="statusDone">BEENDET</span>`;
+  if(m.status === "special") return `<span class="statusPlan">${m.statusText || "INFO"}</span>`;
+  return `<span class="statusPlan">GEPLANT</span>`;
+}
+function setCountdownNumbers(days='--',hours='--',mins='--',secs='--'){
+  document.getElementById('gerDays').textContent = days;
+  document.getElementById('gerHours').textContent = hours;
+  document.getElementById('gerMinutes').textContent = mins;
+  document.getElementById('gerSeconds').textContent = secs;
+}
+function renderGermanyCountdown(matches){
+  const titleEl = document.getElementById('gerTitle');
+  const subEl = document.getElementById('gerSub');
+  const metaEl = document.getElementById('gerMeta');
+  const now = new Date();
+  const germanyMatches = (matches || []).filter(m => isGermanyTeam(m.home) || isGermanyTeam(m.away));
+
+  if(!germanyMatches.length){
+    titleEl.textContent = 'Deutschland';
+    subEl.textContent = 'Noch kein Deutschland-Spiel';
+    setCountdownNumbers('--','--','--','--');
+    metaEl.innerHTML = 'Sobald <b>Deutschland</b> im Feed auftaucht, erscheint hier automatisch der Countdown.';
+    return;
+  }
+
+  const match = germanyMatches.find(m => m.status === 'live') || germanyMatches.find(m => m.d >= now) || germanyMatches[germanyMatches.length - 1];
+  const opponent = isGermanyTeam(match.home) ? match.away : match.home;
+  titleEl.textContent = `Deutschland vs ${opponent}`;
+
+  if(match.status === 'live'){
+    subEl.textContent = 'Deutschland spielt gerade';
+    document.getElementById('gerDays').textContent = 'LIVE';
+    document.getElementById('gerHours').textContent = match.elapsed ?? '--';
+    document.getElementById('gerMinutes').textContent = score(match) !== 'VS' ? score(match) : '--';
+    document.getElementById('gerSeconds').textContent = '⚽';
+    metaEl.innerHTML = `
+      <div class="countMetaRow"><span>🗓️</span><div><b>${fDateLong(match.d)} · ${fTime(match.d)} Uhr</b></div></div>
+      <div class="countMetaRow"><span>📍</span><div><small>${match.stadium || 'Stadion folgt'}${match.city ? ', ' + match.city : ''}</small></div></div>
+      <div class="countMetaRow"><span>⚽</span><div><small>${match.group || 'WM 2026'} · Aktuell ${score(match)}</small></div></div>`;
+    return;
+  }
+
+  if(match.d >= now){
+    const parts = getCountdownParts(match.d - now);
+    subEl.textContent = 'Bis zum nächsten Deutschland-Spiel';
+    setCountdownNumbers(String(parts.days), String(parts.hours).padStart(2,'0'), String(parts.mins).padStart(2,'0'), String(parts.secs).padStart(2,'0'));
+    metaEl.innerHTML = `
+      <div class="countMetaRow"><span>🗓️</span><div><b>${fDateLong(match.d)} · ${fTime(match.d)} Uhr</b></div></div>
+      <div class="countMetaRow"><span>📍</span><div><small>${match.stadium || 'Stadion folgt'}${match.city ? ', ' + match.city : ''}</small></div></div>
+      <div class="countMetaRow"><span>🏟️</span><div><small>${match.group || 'WM 2026'}</small></div></div>`;
+    return;
+  }
+
+  subEl.textContent = 'Letztes Deutschland-Spiel';
+  document.getElementById('gerDays').textContent = score(match) !== 'VS' ? score(match) : 'FT';
+  document.getElementById('gerHours').textContent = 'BE';
+  document.getElementById('gerMinutes').textContent = 'EN';
+  document.getElementById('gerSeconds').textContent = 'DET';
+  metaEl.innerHTML = `
+    <div class="countMetaRow"><span>🗓️</span><div><b>${fDateLong(match.d)} · ${fTime(match.d)} Uhr</b></div></div>
+    <div class="countMetaRow"><span>📍</span><div><small>${match.stadium || 'Stadion folgt'}${match.city ? ', ' + match.city : ''}</small></div></div>
+    <div class="countMetaRow"><span>🏟️</span><div><small>${match.group || 'WM 2026'} · Beendet</small></div></div>`;
+}
+function buildTickerItems(matches){
+  const now = new Date();
+  const items = [];
+  matches.filter(m => m.status === 'live').forEach(m => items.push(`${m.home} ${score(m)} ${m.away} · LIVE${m.elapsed ? ' ' + m.elapsed + "'" : ''}`));
+  const germanyNext = matches.find(m => (isGermanyTeam(m.home) || isGermanyTeam(m.away)) && m.d >= now);
+  if(germanyNext){
+    const opponent = isGermanyTeam(germanyNext.home) ? germanyNext.away : germanyNext.home;
+    items.push(`Deutschland spielt am ${fDate(germanyNext.d)} um ${fTime(germanyNext.d)} Uhr gegen ${opponent}`);
+  }
+  matches.filter(m => m.status === 'finished').slice(0,2).forEach(m => items.push(`${m.home} ${score(m)} ${m.away} · Endstand`));
+  matches.filter(m => m.status === 'scheduled' && m.d >= now).slice(0,3).forEach(m => items.push(`${m.home} vs ${m.away} · ${fDate(m.d)} · ${fTime(m.d)} Uhr`));
+  if(!items.length) items.push('WM 2026 Daten werden geladen ...');
+  items.push('Alle Zeiten in MEZ');
+  return items;
+}
+function renderTicker(matches){
+  const items = buildTickerItems(matches);
+  const html = items.map(item => `<span class="tickerItem">${item}</span>`).join('');
+  document.getElementById('tickerTrack').innerHTML = html + html;
+}
+function render(data){
+  const matches = (data.matches || []).map(m => ({...m, d:new Date(m.date)})).filter(m => !Number.isNaN(+m.d)).sort((a,b)=>a.d-b.d);
+  allMatches = matches;
+  const now = new Date();
+  const current = matches.filter(m => m.d > new Date(now.getTime() - 4*3600*1000)).slice(0,7);
+  const list = current.length ? current : matches.slice(0,7);
+
+  document.getElementById('source').textContent = data.source || 'Railway';
+  document.getElementById('updated').textContent = new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:TZ}).format(new Date());
+
+  document.getElementById('matchList').innerHTML = list.map(m => {
+    const left = m.status === 'live'
+      ? `<div class="kick"><span class="badge live">Live</span><span class="liveMinute">${m.elapsed ? m.elapsed + "'" : ''}</span></div>`
+      : m.status === 'finished'
+        ? `<div class="kick"><span class="badge done">Beendet</span></div>`
+        : `<div class="kick"><span class="timeOnly">${fDate(m.d)} · ${fTime(m.d)}</span></div>`;
+    return `
+      <div class="match ${m.status}">
+        ${left}
+        <div class="logo">${logoHtml(m.homeLogo)}</div>
+        <div class="team">${m.home}</div>
+        <div class="score">${score(m)}</div>
+        <div class="team">${m.away}</div>
+        <div class="logo">${logoHtml(m.awayLogo)}</div>
+        <div class="meta"><b>${m.group || 'WM 2026'}</b>${m.stadium || ''}${m.city ? '<br>' + m.city : ''}<br>${statusLabel(m)}</div>
+      </div>`;
+  }).join('');
+
+  const next = matches.find(m => m.status === 'live') || matches.find(m => m.d >= now) || matches[0];
+  if(next){
+    document.getElementById('nextHomeLogo').innerHTML = logoHtml(next.homeLogo);
+    document.getElementById('nextAwayLogo').innerHTML = logoHtml(next.awayLogo);
+    document.getElementById('nextHome').textContent = next.home;
+    document.getElementById('nextAway').textContent = next.away;
+    document.getElementById('nextInfo').innerHTML = `
+      <div class="nextInfoRow"><span class="infoIcon">🗓️</span><div>${fDate(next.d)} · ${fTime(next.d)} Uhr</div></div>
+      <div class="nextInfoRow"><span class="infoIcon">📍</span><div>${next.stadium || 'Stadion folgt'}${next.city ? ', ' + next.city : ''}</div></div>
+      <div class="nextInfoRow"><span class="infoIcon">🏟️</span><div>${next.group || 'WM 2026'}</div></div>`;
+  }
+
+  renderGermanyCountdown(matches);
+  renderTicker(matches);
+}
+async function load(){
+  try{
+    const res = await fetch(API_URL,{cache:'no-store'});
+    const data = await res.json();
+    render(data);
+  }catch(e){
+    document.getElementById('updated').textContent = 'Fehler: ' + e.message;
+  }
+}
+load();
+setInterval(load, REFRESH_SECONDS * 1000);
+setInterval(() => renderGermanyCountdown(allMatches), 1000);
+</script>
+</body>
+</html>

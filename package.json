@@ -1,0 +1,17 @@
+{
+  "name": "wm2026-railway-tv-plan",
+  "version": "1.0.0",
+  "description": "WM 2026 TV-Spielplan mit Railway Proxy und Auto-Update",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
