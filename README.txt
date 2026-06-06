@@ -1,15 +1,19 @@
-WM 2026 TV Spielplan - korrekte statische Version
+WM 2026 TV Spielplan - Crashfix
 
-Diese Version nutzt einen fest eingebauten WM-2026-Spielplan mit 104 Spielen.
-Die Zeiten sind für Deutschland / Europe/Berlin umgerechnet.
-Es wird keine Sport-API benötigt.
+Diese Version behebt den Railway-Crash:
 
-Railway:
-1. ZIP entpacken
-2. Dateien in GitHub hochladen
-3. Railway neu deployen
-4. /health prüfen: staticMatches muss 104 sein
-5. /api/wm2026 zeigt alle Spiele
+ReferenceError: Cannot access 'COUNTRY_CODES' before initialization
 
-Hinweis:
-Live-Ergebnisse sind in dieser Version nicht automatisch aktiv, dafür stimmt der Spielplan zuverlässig.
+Ursache:
+Der Server hat den Spielplan mit Flaggen angereichert, bevor COUNTRY_CODES geladen war.
+
+Behoben:
+COUNTRY_CODES steht jetzt ganz oben vor enrichMatch und vor dem Laden des Spielplans.
+
+Test nach Deploy:
+1. /health öffnen
+2. Es muss stehen:
+   ok: true
+   staticMatches: 104
+
+Diese Version braucht keine Sport-API.
