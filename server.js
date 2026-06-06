@@ -44,6 +44,7 @@ app.get("/api/wm2026", async (req, res) => {
     return res.json({
       source: cache.source || "cache",
       updatedAt: new Date(cache.ts).toISOString(),
+      serverNow: new Date().toISOString(),
       cached: true,
       matches: cache.data,
       warning: cache.error || undefined
@@ -56,6 +57,7 @@ app.get("/api/wm2026", async (req, res) => {
     return res.json({
       source: "demo-no-api-key",
       updatedAt: new Date().toISOString(),
+      serverNow: new Date().toISOString(),
       warning: "APIFOOTBALL_KEY fehlt in Railway Variables.",
       matches: fallback
     });
@@ -106,6 +108,7 @@ app.get("/api/wm2026", async (req, res) => {
     res.json({
       source: "api-football",
       updatedAt: new Date(now).toISOString(),
+      serverNow: new Date().toISOString(),
       count: matches.length,
       cached: false,
       matches
@@ -122,6 +125,7 @@ app.get("/api/wm2026", async (req, res) => {
       return res.json({
         source: "cache-after-error",
         updatedAt: new Date(cache.ts).toISOString(),
+        serverNow: new Date().toISOString(),
         warning: message,
         matches: cache.data,
         cached: true
@@ -133,6 +137,7 @@ app.get("/api/wm2026", async (req, res) => {
     res.json({
       source: "demo-after-error",
       updatedAt: new Date().toISOString(),
+      serverNow: new Date().toISOString(),
       warning: message,
       matches: fallback,
       cached: false
@@ -313,15 +318,15 @@ function demoMatches() {
     {
       fixtureId: 1,
       date: "2026-06-11T21:00:00+02:00",
-      status: "live",
-      statusShort: "1H",
-      statusText: "1. Halbzeit",
-      elapsed: 45,
+      status: "scheduled",
+      statusShort: "NS",
+      statusText: "Geplant",
+      elapsed: null,
       group: "Gruppe A",
       home: "Mexiko",
       away: "Südafrika",
-      homeScore: 2,
-      awayScore: 1,
+      homeScore: null,
+      awayScore: null,
       stadium: "Estadio Azteca",
       city: "Mexiko-Stadt"
     },
@@ -384,14 +389,14 @@ function demoMatches() {
     {
       fixtureId: 6,
       date: "2026-06-13T00:00:00+02:00",
-      status: "finished",
-      statusShort: "FT",
-      statusText: "Beendet",
+      status: "scheduled",
+      statusShort: "NS",
+      statusText: "Geplant",
       group: "Gruppe E",
       home: "Schweiz",
       away: "Bosnien-Herzegowina",
-      homeScore: 3,
-      awayScore: 0,
+      homeScore: null,
+      awayScore: null,
       stadium: "MetLife Stadium",
       city: "New York"
     },

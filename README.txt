@@ -84,3 +84,13 @@ API prüfen:
 1. /health öffnen → hasApiKey muss true sein
 2. /api/wm2026 öffnen → wenn warning kommt, stimmt Key/Tarif/Saison noch nicht
 3. Auf API-Football muss dein Tarif die WM 2026 Fixtures erlauben
+
+Countdown-Fix:
+- Countdown nutzt jetzt die Serverzeit von Railway, nicht nur die Uhr vom TV/Browser.
+- API-Football timestamp wird bevorzugt, damit Zeitzonen sauberer funktionieren.
+- Dadurch läuft der Countdown auf Raspberry Pi / TV auch dann korrekt, wenn die Geräte-Uhr falsch ist.
+
+Status-Fix:
+- Demo/Fallback-Daten zeigen jetzt keine falschen LIVE- oder BEENDET-Status mehr.
+- Wenn die Sport-API nicht liefert, sind alle Beispielspiele neutral als GEPLANT markiert.
+- Echte LIVE-/BEENDET-Status kommen nur noch von API-Football.

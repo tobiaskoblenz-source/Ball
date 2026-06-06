@@ -216,6 +216,7 @@ const REFRESH_SECONDS = 60;
 const TZ = "Europe/Berlin";
 let allMatches = [];
 let lastApiWarning = "";
+let serverTimeOffsetMs = 0;
 
 function clock(){
   const now = new Date();
@@ -227,6 +228,13 @@ setInterval(clock,1000); clock();
 function fDate(d){return new Intl.DateTimeFormat("de-DE",{day:"2-digit",month:"2-digit",timeZone:TZ}).format(d)}
 function fTime(d){return new Intl.DateTimeFormat("de-DE",{hour:"2-digit",minute:"2-digit",timeZone:TZ}).format(d)}
 function fDateLong(d){return new Intl.DateTimeFormat("de-DE",{weekday:"short",day:"2-digit",month:"2-digit",year:"numeric",timeZone:TZ}).format(d)}
+function getSyncedNow(){
+  return new Date(Date.now() + serverTimeOffsetMs);
+}
+function matchDate(m){
+  if (m.timestamp && Number(m.timestamp) > 0) return new Date(Number(m.timestamp) * 1000);
+  return new Date(m.date);
+}
 function isGermanyTeam(name){
   const n = String(name || "").trim().toLowerCase();
   return n === "deutschland" || n === "germany" || n === "ger";
@@ -262,7 +270,7 @@ function renderGermanyCountdown(matches){
   const titleEl = document.getElementById('gerTitle');
   const subEl = document.getElementById('gerSub');
   const metaEl = document.getElementById('gerMeta');
-  const now = new Date();
+  const now = getSyncedNow();
   const germanyMatches = (matches || []).filter(m => isGermanyTeam(m.home) || isGermanyTeam(m.away));
 
   if(!germanyMatches.length){
@@ -312,7 +320,7 @@ function renderGermanyCountdown(matches){
     <div class="countMetaRow"><span>🏟️</span><div><small>${match.group || 'WM 2026'} · Beendet</small></div></div>`;
 }
 function buildTickerItems(matches){
-  const now = new Date();
+  const now = getSyncedNow();
   const items = [];
   if (lastApiWarning) items.push(`API Hinweis: ${lastApiWarning}`);
   matches.filter(m => m.status === 'live').forEach(m => items.push(`${m.home} ${score(m)} ${m.away} · LIVE${m.elapsed ? ' ' + m.elapsed + "'" : ''}`));
@@ -333,9 +341,13 @@ function renderTicker(matches){
   document.getElementById('tickerTrack').innerHTML = html + html;
 }
 function render(data){
-  const matches = (data.matches || []).map(m => ({...m, d:new Date(m.date)})).filter(m => !Number.isNaN(+m.d)).sort((a,b)=>a.d-b.d);
+  if (data.serverNow) {
+    const serverNowDate = new Date(data.serverNow);
+    if (!Number.isNaN(+serverNowDate)) serverTimeOffsetMs = serverNowDate.getTime() - Date.now();
+  }
+  const matches = (data.matches || []).map(m => ({...m, d: matchDate(m)})).filter(m => !Number.isNaN(+m.d)).sort((a,b)=>a.d-b.d);
   allMatches = matches;
-  const now = new Date();
+  const now = getSyncedNow();
   const current = matches.filter(m => m.d > new Date(now.getTime() - 4*3600*1000)).slice(0,7);
   const list = current.length ? current : matches.slice(0,7);
 
