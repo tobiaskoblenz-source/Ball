@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WM 2026 Ergebnisse eingeben</title>
+<style>
+:root{--bg:#06111f;--panel:#0b1d35;--line:rgba(255,255,255,.14);--gold:#f3bf3d;--text:#f7fbff;--muted:#a8b6c8;--red:#d92323;--green:#1c9b56}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,rgba(38,117,202,.28),transparent 34%),linear-gradient(180deg,#06111f,#020812);color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:28px}
+h1{margin:0 0 6px;font-size:38px;color:var(--gold)}
+.sub{color:var(--muted);margin-bottom:22px}
+.card{background:linear-gradient(180deg,rgba(11,29,53,.96),rgba(4,13,25,.96));border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.grid{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr 1fr auto;gap:10px;align-items:end}
+label{display:block;color:var(--muted);font-size:13px;margin:0 0 6px}
+select,input,button{width:100%;height:42px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:#07172a;color:var(--text);padding:0 12px;font-size:15px}
+button{cursor:pointer;font-weight:800;border:0;background:linear-gradient(135deg,var(--gold),#98650a);color:#07111f}
+button.danger{background:linear-gradient(135deg,#e05252,#8b1111);color:white}
+.row{display:grid;grid-template-columns:80px 1fr 90px 1fr 150px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.flag{width:46px;height:28px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.16);vertical-align:middle;margin-right:8px}
+.small{font-size:13px;color:var(--muted)}
+.status{display:inline-block;padding:4px 9px;border-radius:99px;background:#0b2845;color:var(--gold);font-weight:800;font-size:12px}
+.status.live{background:rgba(217,35,35,.18);color:#ff6b6b}.status.finished{background:rgba(28,155,86,.18);color:#5ee08f}
+.msg{margin-top:14px;font-weight:800}.ok{color:#5ee08f}.err{color:#ff6b6b}
+.links{margin:14px 0 0}.links a{color:var(--gold);text-decoration:none;font-weight:800}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}.wrap{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>WM 2026 Ergebnisse eingeben</h1>
+  <div class="sub">Notfall-Handeingabe. Diese Werte überschreiben API-Daten auf der TV-Seite.</div>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label>Spiel</label>
+        <select id="matchSelect"></select>
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="status">
+          <option value="scheduled">Geplant</option>
+          <option value="live">LIVE</option>
+          <option value="finished">Beendet</option>
+          <option value="special">Info/Sonderfall</option>
+        </select>
+      </div>
+      <div>
+        <label>Heim Tore</label>
+        <input id="homeScore" type="number" min="0" step="1" placeholder="-">
+      </div>
+      <div>
+        <label>Auswärts Tore</label>
+        <input id="awayScore" type="number" min="0" step="1" placeholder="-">
+      </div>
+      <div>
+        <label>Minute bei LIVE</label>
+        <input id="elapsed" type="number" min="0" max="130" step="1" placeholder="-">
+      </div>
+      <div>
+        <label>Notiz</label>
+        <input id="note" placeholder="optional">
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button id="saveBtn">Speichern</button>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:12px;grid-template-columns:1fr auto auto">
+      <div>
+        <label>Admin PIN, falls gesetzt</label>
+        <input id="pin" type="password" placeholder="nur wenn ADMIN_PIN in Railway gesetzt ist">
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button class="danger" id="deleteBtn">Eintrag löschen</button>
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button id="reloadBtn">Neu laden</button>
+      </div>
+    </div>
+    <div id="msg" class="msg"></div>
+    <div class="links"><a href="/" target="_blank">TV-Seite öffnen</a> · <a href="/api/wm2026" target="_blank">API prüfen</a></div>
+  </div>
+
+  <h2>Spiele</h2>
+  <div class="card" id="list"></div>
+</div>
+
+<script>
+let matches = [];
+
+function statusLabel(s){
+  if(s === "live") return "LIVE";
+  if(s === "finished") return "BEENDET";
+  if(s === "special") return "INFO";
+  return "GEPLANT";
+}
+function fmtDate(iso){
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("de-DE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",timeZone:"Europe/Berlin"}).format(d);
+}
+function scoreText(m){
+  const a = m.manual || {};
+  if(a.homeScore !== null && a.homeScore !== undefined && a.awayScore !== null && a.awayScore !== undefined) return `${a.homeScore}:${a.awayScore}`;
+  return "VS";
+}
+async function load(){
+  const res = await fetch("/api/admin/matches",{cache:"no-store"});
+  const data = await res.json();
+  matches = data.matches || [];
+
+  const sel = document.getElementById("matchSelect");
+  sel.innerHTML = matches.map(m => `<option value="${m.matchNo}">#${m.matchNo} · ${fmtDate(m.date)} · ${m.home} vs ${m.away}</option>`).join("");
+  sel.onchange = fillForm;
+  renderList();
+  fillForm();
+}
+function fillForm(){
+  const no = document.getElementById("matchSelect").value;
+  const m = matches.find(x => String(x.matchNo) === String(no));
+  const a = m?.manual || {};
+  document.getElementById("status").value = a.status || "scheduled";
+  document.getElementById("homeScore").value = a.homeScore ?? "";
+  document.getElementById("awayScore").value = a.awayScore ?? "";
+  document.getElementById("elapsed").value = a.elapsed ?? "";
+  document.getElementById("note").value = a.note || "";
+}
+function renderList(){
+  const list = document.getElementById("list");
+  list.innerHTML = matches.map(m => {
+    const a = m.manual || {};
+    const st = a.status || "scheduled";
+    return `<div class="row">
+      <div class="small">#${m.matchNo}<br>${fmtDate(m.date)}</div>
+      <div><img class="flag" src="${m.homeFlagUrl || ''}" onerror="this.style.display='none'">${m.home}</div>
+      <div style="text-align:center;font-weight:900;color:var(--gold)">${scoreText(m)}</div>
+      <div><img class="flag" src="${m.awayFlagUrl || ''}" onerror="this.style.display='none'">${m.away}</div>
+      <div><span class="status ${st}">${statusLabel(st)}</span><br><span class="small">${m.group}</span></div>
+    </div>`;
+  }).join("");
+}
+async function save(action="save"){
+  const body = {
+    action,
+    matchNo: document.getElementById("matchSelect").value,
+    status: document.getElementById("status").value,
+    homeScore: document.getElementById("homeScore").value,
+    awayScore: document.getElementById("awayScore").value,
+    elapsed: document.getElementById("elapsed").value,
+    note: document.getElementById("note").value,
+    pin: document.getElementById("pin").value
+  };
+
+  const res = await fetch("/api/manual-results",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  });
+  const data = await res.json();
+  const msg = document.getElementById("msg");
+  if(data.ok){
+    msg.className = "msg ok";
+    msg.textContent = action === "delete" ? "Eintrag gelöscht." : "Gespeichert.";
+    await load();
+  } else {
+    msg.className = "msg err";
+    msg.textContent = data.error || "Fehler.";
+  }
+}
+document.getElementById("saveBtn").onclick = () => save("save");
+document.getElementById("deleteBtn").onclick = () => save("delete");
+document.getElementById("reloadBtn").onclick = load;
+load();
+</script>
+</body>
+</html>
