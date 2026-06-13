@@ -22,3 +22,9 @@ Test:
 /health
 /api/wm2026
 /admin.html
+
+
+Fix Ergebnisanzeige vom Vortag:
+- Beendete Spiele und manuell eingetragene Ergebnisse verschwinden nicht mehr sofort.
+- Die TV-Liste zeigt jetzt auch Ergebnisse von gestern und heute.
+- Zukünftige Spiele laufen danach weiter.
