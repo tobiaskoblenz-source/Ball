@@ -28,3 +28,10 @@ Fix Ergebnisanzeige vom Vortag:
 - Beendete Spiele und manuell eingetragene Ergebnisse verschwinden nicht mehr sofort.
 - Die TV-Liste zeigt jetzt auch Ergebnisse von gestern und heute.
 - Zukünftige Spiele laufen danach weiter.
+
+
+Neue Seite:
+- /turnier.html
+- zeigt alle Gruppen A bis L
+- zeigt K.-o.-Runde vom Sechzehntelfinale bis Finale
+- übernimmt Live-/Handeingabe-Ergebnisse aus /api/wm2026
