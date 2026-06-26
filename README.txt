@@ -35,3 +35,9 @@ Neue Seite:
 - zeigt alle Gruppen A bis L
 - zeigt K.-o.-Runde vom Sechzehntelfinale bis Finale
 - übernimmt Live-/Handeingabe-Ergebnisse aus /api/wm2026
+
+
+Turnierbaum-Update:
+- /turnier.html jetzt im Sky-ähnlichen K.O.-Baum-Look
+- Runde der letzten 32 links/rechts, Achtelfinale, Viertelfinale, Halbfinale, Finale und Spiel um Platz 3
+- Ergebnisse aus API oder Handeingabe werden übernommen
