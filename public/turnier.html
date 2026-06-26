@@ -6,94 +6,154 @@
 <title>WM 2026 Turnierbaum</title>
 <style>
 :root{
-  --bg:#050018;
-  --blue:#173aaf;
-  --cyan:#74d7ff;
-  --lime:#caff59;
-  --text:#ffffff;
-  --muted:#d8dcff;
-  --line:rgba(255,255,255,.72);
-  --box:#73777f;
+  --lime:#cfff55;
+  --white:#ffffff;
+  --muted:#c9d2ff;
+  --line:rgba(255,255,255,.70);
+  --lineSoft:rgba(255,255,255,.24);
+  --glass:rgba(7,13,42,.38);
+  --glass2:rgba(255,255,255,.07);
+  --shadow:0 16px 42px rgba(0,0,0,.38);
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#050018;color:var(--text);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;overflow:auto}
+html,body{margin:0;width:100%;height:100%;background:#070018;color:var(--white);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;overflow:hidden}
 body{
   background:
-    radial-gradient(circle at 50% 46%,rgba(42,101,255,.72),rgba(17,36,116,.55) 24%,rgba(15,7,46,.92) 55%,rgba(7,0,18,.98) 100%),
-    linear-gradient(90deg,rgba(11,0,23,.96),rgba(24,54,166,.48),rgba(11,0,23,.96));
+    radial-gradient(circle at 50% 48%,rgba(49,107,255,.88),rgba(33,65,184,.58) 22%,rgba(19,12,71,.78) 48%,rgba(8,0,25,.98) 100%),
+    linear-gradient(90deg,#070018,#142c91 48%,#070018);
 }
 body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;
+  content:"";position:fixed;inset:-5%;pointer-events:none;opacity:.18;
   background:
-    radial-gradient(circle at 50% 50%,transparent 0 16%,rgba(255,255,255,.09) 17% 18%,transparent 19% 100%),
-    linear-gradient(115deg,transparent 0 43%,rgba(255,255,255,.10) 44% 46%,transparent 47% 100%),
-    linear-gradient(65deg,transparent 0 42%,rgba(255,255,255,.07) 43% 45%,transparent 46% 100%);
-  mix-blend-mode:screen;
+    radial-gradient(circle at 50% 50%,transparent 0 18%,rgba(255,255,255,.08) 19% 20%,transparent 21%),
+    linear-gradient(115deg,transparent 0 41%,rgba(255,255,255,.12) 42% 44%,transparent 45%),
+    linear-gradient(245deg,transparent 0 43%,rgba(255,255,255,.10) 44% 46%,transparent 47%);
+  filter:blur(.2px);
 }
-.page{width:1600px;max-width:100%;min-height:900px;margin:0 auto;padding:28px 36px 28px;position:relative}
-.header{position:relative;text-align:center;height:145px}
-h1{margin:20px 0 0;font-size:56px;line-height:1.05;letter-spacing:5px;text-transform:uppercase;font-weight:900;text-shadow:0 0 22px rgba(126,178,255,.55)}
-.topnav{position:absolute;right:0;top:0;display:flex;gap:10px}
-.topnav a,.topnav button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:white;border-radius:999px;padding:9px 13px;font-weight:900;text-decoration:none;cursor:pointer}
-.topnav a.active{background:rgba(202,255,89,.2);color:var(--lime)}
-.bracket{position:relative;display:grid;grid-template-columns:270px 210px 190px 1fr 190px 210px 270px;gap:20px;align-items:start;min-height:680px}
-.colTitle{height:38px;color:var(--lime);font-weight:900;text-transform:uppercase;font-size:19px;line-height:1.05;letter-spacing:.3px;text-shadow:0 0 12px rgba(202,255,89,.25)}
+.page{
+  width:1920px;height:1080px;max-width:100vw;max-height:100vh;
+  transform-origin:top left;
+  padding:28px 42px 24px;
+  position:relative;
+}
+.header{
+  height:140px;position:relative;text-align:center;
+}
+h1{
+  margin:20px 0 0;
+  font-size:66px;line-height:1.03;letter-spacing:6px;text-transform:uppercase;font-weight:950;
+  text-shadow:0 0 28px rgba(116,170,255,.70),0 3px 0 rgba(0,0,0,.25);
+}
+.topnav{position:absolute;right:0;top:0;display:flex;gap:10px;z-index:5}
+.topnav a,.topnav button{
+  color:white;text-decoration:none;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);border-radius:999px;padding:9px 14px;font-weight:950;cursor:pointer;font-size:13px;
+}
+.topnav a.active{background:rgba(207,255,85,.18);color:var(--lime);border-color:rgba(207,255,85,.5)}
+.bracket{
+  height:855px;
+  display:grid;
+  grid-template-columns:288px 214px 190px 1fr 190px 214px 288px;
+  gap:19px;
+  align-items:start;
+  position:relative;
+}
+.colTitle{
+  height:34px;color:var(--lime);font-weight:950;text-transform:uppercase;font-size:18px;line-height:1.02;letter-spacing:.6px;
+  text-shadow:0 0 14px rgba(207,255,85,.35);
+}
+.colTitle.right{text-align:right}
 .round{position:relative}
-.left32 .slot,.right32 .slot{margin-bottom:16px}
-.left16 .slot,.right16 .slot{margin-bottom:70px}
-.leftQ .slot,.rightQ .slot{margin-bottom:154px}
-.leftSemi,.rightSemi{padding-top:355px}
+.left32 .slot,.right32 .slot{height:78px;margin-bottom:11px}
+.left16 .slot,.right16 .slot{height:93px;margin-bottom:77px}
+.leftQ .slot,.rightQ .slot{height:112px;margin-bottom:208px}
+.leftSemi,.rightSemi{padding-top:410px}
+.leftSemi .slot,.rightSemi .slot{height:120px}
 .slot{
-  min-height:76px;position:relative;display:flex;flex-direction:column;justify-content:center;
+  position:relative;border-radius:13px;padding:5px 7px;
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(5,9,31,.10));
 }
+.slot:hover{background:rgba(255,255,255,.11)}
 .team{
-  display:grid;grid-template-columns:46px 1fr;gap:9px;align-items:center;min-height:32px;margin:3px 0;font-weight:900;font-size:18px;text-shadow:0 2px 6px rgba(0,0,0,.5)
+  display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:center;height:31px;margin:2px 0;
+  font-weight:950;font-size:17px;letter-spacing:.1px;text-shadow:0 2px 8px rgba(0,0,0,.58);
+  white-space:nowrap;overflow:hidden;
 }
-.right32 .team,.right16 .team,.rightQ .team,.rightSemi .team{grid-template-columns:1fr 46px;text-align:right}
+.team span:last-child{overflow:hidden;text-overflow:ellipsis}
+.right32 .team,.right16 .team,.rightQ .team,.rightSemi .team{grid-template-columns:1fr 42px;text-align:right}
 .flag,.qmark{
-  width:46px;height:30px;border-radius:4px;border:2px solid rgba(255,255,255,.75);object-fit:cover;background:#777;display:flex;align-items:center;justify-content:center;color:white;font-size:24px;font-weight:1000;box-shadow:0 0 0 1px rgba(0,0,0,.6) inset
+  width:42px;height:28px;border-radius:4px;border:2px solid rgba(255,255,255,.76);object-fit:cover;background:#74777f;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:23px;font-weight:1000;box-shadow:0 0 0 1px rgba(0,0,0,.55) inset,0 4px 10px rgba(0,0,0,.22);
 }
-.qmark{background:linear-gradient(#8c8f95,#5f6268)}
-.seed{font-size:16px;color:#fff;font-weight:900}
-.seed b{color:var(--lime)}
-.vline,.hline{position:absolute;background:var(--line);opacity:.95}
-.left32 .slot:after,.left16 .slot:after,.leftQ .slot:after{content:"";position:absolute;right:-12px;top:20px;width:2px;height:56px;background:var(--line)}
-.left32 .slot:before,.left16 .slot:before,.leftQ .slot:before{content:"";position:absolute;right:-12px;top:47px;width:12px;height:2px;background:var(--line)}
-.right32 .slot:after,.right16 .slot:after,.rightQ .slot:after{content:"";position:absolute;left:-12px;top:20px;width:2px;height:56px;background:var(--line)}
-.right32 .slot:before,.right16 .slot:before,.rightQ .slot:before{content:"";position:absolute;left:-12px;top:47px;width:12px;height:2px;background:var(--line)}
-.leftSemi .slot:after{content:"HALBFINALE";position:absolute;left:-54px;top:-84px;writing-mode:vertical-rl;transform:rotate(180deg);color:var(--lime);font-weight:900;font-size:19px;letter-spacing:1px}
-.rightSemi .slot:after{content:"HALBFINALE";position:absolute;right:-54px;top:-84px;writing-mode:vertical-rl;color:var(--lime);font-weight:900;font-size:19px;letter-spacing:1px}
-.center{padding-top:122px;text-align:center;position:relative}
-.center h2{color:var(--lime);font-size:30px;margin:0 0 12px;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 12px rgba(202,255,89,.25)}
-.finalTeams{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
-.center .smallTeam{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:900}
-.trophy{margin:48px auto 30px;width:78px;height:104px;border-radius:40px;background:linear-gradient(135deg,#fff6bd,#bc8624 48%,#fff3a0);box-shadow:0 0 30px rgba(255,210,68,.45);display:flex;align-items:end;justify-content:center;color:#111;font-weight:1000;padding-bottom:12px}
-.centerLine{height:2px;background:var(--line);width:190px;margin:22px auto;position:relative}
-.centerLine:before,.centerLine:after{content:"";position:absolute;top:0;width:2px;height:34px;background:var(--line)}
+.qmark{background:linear-gradient(#9ba0aa,#626770)}
+.meta{
+  font-size:10px;color:var(--muted);font-weight:950;letter-spacing:.25px;margin:0 0 2px;
+  display:flex;justify-content:space-between;gap:6px;opacity:.92;
+}
+.status{font-size:11px;color:var(--muted);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{color:var(--lime);font-weight:1000}.live{color:#ff7373}.finished{color:#62e996}
+.connectorR:after,.connectorL:after{content:"";position:absolute;top:28px;width:2px;height:66px;background:var(--line);z-index:0}
+.connectorR:before,.connectorL:before{content:"";position:absolute;top:60px;width:15px;height:2px;background:var(--line);z-index:0}
+.connectorR:after{right:-12px}.connectorR:before{right:-12px}
+.connectorL:after{left:-12px}.connectorL:before{left:-12px}
+.left32 .slot:nth-child(odd):after,.right32 .slot:nth-child(odd):after{height:90px}
+.left16 .slot:nth-child(odd):after,.right16 .slot:nth-child(odd):after{height:174px}
+.leftQ .slot:nth-child(odd):after,.rightQ .slot:nth-child(odd):after{height:256px}
+.left32 .slot:nth-child(even):after,.right32 .slot:nth-child(even):after,
+.left16 .slot:nth-child(even):after,.right16 .slot:nth-child(even):after,
+.leftQ .slot:nth-child(even):after,.rightQ .slot:nth-child(even):after{display:none}
+.semiLabelL,.semiLabelR{
+  position:absolute;top:360px;color:var(--lime);font-weight:950;font-size:18px;letter-spacing:1px;text-transform:uppercase;
+  writing-mode:vertical-rl;text-shadow:0 0 12px rgba(207,255,85,.35)
+}
+.semiLabelL{left:-34px;transform:rotate(180deg)}
+.semiLabelR{right:-34px}
+.center{
+  height:855px;text-align:center;position:relative;padding-top:118px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.center h2{color:var(--lime);font-size:32px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 16px rgba(207,255,85,.38)}
+.centerCard{
+  min-width:230px;border-radius:18px;padding:13px 16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(0,0,0,.12));
+  border:1px solid rgba(255,255,255,.16);box-shadow:var(--shadow)
+}
+.finalTeams{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0}
+.finalNames{font-weight:950;line-height:1.25;text-shadow:0 2px 8px rgba(0,0,0,.48)}
+.centerLine{height:2px;background:var(--line);width:230px;margin:26px auto;position:relative}
+.centerLine:before,.centerLine:after{content:"";position:absolute;top:0;width:2px;height:38px;background:var(--line)}
 .centerLine:before{left:0}.centerLine:after{right:0}
-.third{margin-top:6px}
-.miniMeta{font-size:13px;color:var(--muted);font-weight:800;margin:3px 0 7px}
-.score{display:inline-block;min-width:38px;color:var(--lime);font-weight:1000}
-.status{font-size:12px;color:var(--muted);font-weight:800}
-.footer{display:flex;justify-content:space-between;color:var(--muted);font-weight:800;font-size:13px;margin-top:18px}
+.trophy{
+  width:86px;height:118px;border-radius:45px 45px 28px 28px;
+  background:linear-gradient(135deg,#fff7bb 0,#d99b28 40%,#80520b 58%,#fff2a0 100%);
+  box-shadow:0 0 34px rgba(255,214,68,.55),inset 0 0 18px rgba(255,255,255,.35);
+  display:flex;align-items:end;justify-content:center;color:#111;font-weight:1000;padding-bottom:12px;font-size:16px;
+}
+.third{margin-top:4px}
+.third h2{font-size:21px;margin-top:0}
+.footer{
+  height:30px;color:var(--muted);display:flex;justify-content:space-between;align-items:end;font-size:13px;font-weight:850;
+  text-shadow:0 2px 8px rgba(0,0,0,.4)
+}
 @media(max-width:1200px){
-  html,body{overflow:auto}
-  .page{width:100%;min-height:auto}
-  .header{height:auto;padding-bottom:20px}
-  h1{font-size:36px}
-  .topnav{position:static;justify-content:center;margin-top:16px;flex-wrap:wrap}
-  .bracket{display:block}
-  .round{margin-bottom:18px;background:rgba(0,0,0,.20);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
-  .left16,.right16,.leftQ,.rightQ,.leftSemi,.rightSemi,.center{padding-top:0}
-  .slot{min-height:auto;margin-bottom:10px!important}
-  .slot:before,.slot:after{display:none!important}
-  .right32 .team,.right16 .team,.rightQ .team,.rightSemi .team{grid-template-columns:46px 1fr;text-align:left}
+  html,body{overflow:auto;height:auto}
+  .page{width:100%;height:auto;max-height:none;padding:16px;transform:none!important}
+  .header{height:auto;padding-bottom:18px}
+  h1{font-size:35px;letter-spacing:2px}
+  .topnav{position:static;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .bracket{height:auto;display:block}
+  .round,.center{height:auto;padding:14px!important;margin-bottom:14px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);border-radius:16px}
+  .slot{height:auto!important;margin-bottom:8px!important}
+  .slot:before,.slot:after,.semiLabelL,.semiLabelR{display:none!important}
+  .right32 .team,.right16 .team,.rightQ .team,.rightSemi .team{grid-template-columns:42px 1fr;text-align:left}
   .right32 .team .flag,.right32 .team .qmark,.right16 .team .flag,.right16 .team .qmark,.rightQ .team .flag,.rightQ .team .qmark,.rightSemi .team .flag,.rightSemi .team .qmark{order:-1}
+  .colTitle.right{text-align:left}
+  .footer{display:block;height:auto}
 }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="page">
   <div class="header">
     <div class="topnav">
       <a href="/">TV-Seite</a>
@@ -111,29 +171,34 @@ h1{margin:20px 0 0;font-size:56px;line-height:1.05;letter-spacing:5px;text-trans
 
     <div class="center">
       <h2>Finale</h2>
-      <div id="finalBox"></div>
+      <div class="centerCard" id="finalBox"></div>
       <div class="centerLine"></div>
       <div class="trophy">FIFA</div>
       <div class="centerLine"></div>
       <div class="third">
-        <h2 style="font-size:20px;margin-top:0">Spiel um Platz 3</h2>
-        <div id="thirdBox"></div>
+        <h2>Spiel um Platz 3</h2>
+        <div class="centerCard" id="thirdBox"></div>
       </div>
     </div>
 
-    <div class="round rightQ"><div class="colTitle">Viertelfinale</div><div id="rightQ"></div></div>
-    <div class="round right16"><div class="colTitle">Achtelfinale</div><div id="right16"></div></div>
-    <div class="round right32"><div class="colTitle">Runde der<br>letzten 32</div><div id="right32"></div></div>
+    <div class="round rightQ"><div class="colTitle right">Viertelfinale</div><div class="semiLabelR">Halbfinale</div><div id="rightQ"></div></div>
+    <div class="round right16"><div class="colTitle right">Achtelfinale</div><div id="right16"></div></div>
+    <div class="round right32"><div class="colTitle right">Runde der<br>letzten 32</div><div id="right32"></div></div>
   </div>
 
-  <div class="footer">
-    <div id="status">Lade Daten…</div>
-    <div>Alle Zeiten Deutschland / Europe-Berlin</div>
-  </div>
+  <div class="footer"><div id="status">Lade Daten…</div><div>Alle Zeiten Deutschland / Europe-Berlin</div></div>
 </div>
 
 <script>
 let serverTimeOffsetMs=0;
+function fitPage(){
+  const p=document.getElementById("page");
+  if(window.innerWidth>1200){
+    const s=Math.min(window.innerWidth/1920,window.innerHeight/1080);
+    p.style.transform=`scale(${s})`;
+  } else p.style.transform="none";
+}
+window.addEventListener("resize",fitPage);fitPage();
 function getSyncedNow(){return new Date(Date.now()+serverTimeOffsetMs)}
 function matchDate(m){if(m.timestamp&&Number(m.timestamp)>0)return new Date(Number(m.timestamp)*1000);return new Date(m.date)}
 function fmtDate(m){return new Intl.DateTimeFormat("de-DE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",timeZone:"Europe/Berlin"}).format(matchDate(m))}
@@ -141,47 +206,54 @@ function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&l
 function flag(url,name){return url?`<img class="flag" src="${esc(url)}" alt="${esc(name)}" onerror="this.outerHTML='<span class=&quot;qmark&quot;>?</span>'">`:`<span class="qmark">?</span>`}
 function roundName(raw){const r=String(raw||"");if(/Round of 32/i.test(r))return"R32";if(/Round of 16/i.test(r))return"R16";if(/Quarter/i.test(r))return"QF";if(/Semi/i.test(r))return"SF";if(/Third/i.test(r))return"THIRD";if(/Final/i.test(r))return"FINAL";return""}
 function isPlaceholder(t){return /^(Sieger|Verlierer|Zweiter|Dritter|1\.|2\.|3\.)/i.test(String(t||""))}
+function shorten(name){
+  return String(name||"noch offen")
+    .replace("Bosnien-Herzegowina","Bosnien-Herz.")
+    .replace("Elfenbeinküste","Elfenbeink.")
+    .replace("Saudi-Arabien","Saudi-Arab.")
+}
 function teamLine(name,url,right=false){
-  const n=esc(name||"noch offen");
+  const n=esc(shorten(name));
   const icon=isPlaceholder(name)?'<span class="qmark">?</span>':flag(url,name);
   return right?`<div class="team"><span>${n}</span>${icon}</div>`:`<div class="team">${icon}<span>${n}</span></div>`;
 }
 function scoreText(m){
   const has=m.homeScore!==null&&m.homeScore!==undefined&&m.awayScore!==null&&m.awayScore!==undefined;
-  return has?`<span class="score">${m.homeScore}:${m.awayScore}</span>`:`<span class="status">noch offen</span>`;
+  return has?`<span class="score">${m.homeScore}:${m.awayScore}</span>`:`noch offen`;
 }
-function slot(m,right=false){
-  if(!m)return `<div class="slot">${teamLine("noch offen","",right)}${teamLine("noch offen","",right)}</div>`;
-  return `<div class="slot">
-    <div class="miniMeta">#${m.matchNo||m.fixtureId} · ${fmtDate(m)}</div>
+function statusClass(m){if(m.status==="live")return"live";if(m.status==="finished")return"finished";return""}
+function slot(m,right=false,klass=""){
+  if(!m)return `<div class="slot ${klass}">${teamLine("noch offen","",right)}${teamLine("noch offen","",right)}</div>`;
+  return `<div class="slot ${klass}">
+    <div class="meta"><span>#${m.matchNo||m.fixtureId}</span><span>${fmtDate(m)}</span></div>
     ${teamLine(m.home,m.homeFlagUrl,right)}
     ${teamLine(m.away,m.awayFlagUrl,right)}
-    <div class="status">${scoreText(m)} · ${esc(m.statusText||"Geplant")}</div>
+    <div class="status ${statusClass(m)}">${scoreText(m)} · ${esc(m.statusText||"Geplant")}</div>
   </div>`;
 }
 function centerSlot(m){
-  if(!m)return `<div class="finalTeams"><span class="qmark">?</span><span class="qmark">?</span></div><div class="status">noch offen<br>noch offen</div>`;
-  return `<div class="miniMeta">${fmtDate(m)} · ${esc(m.stadium||"")}</div>
+  if(!m)return `<div class="finalTeams"><span class="qmark">?</span><span class="qmark">?</span></div><div class="finalNames">noch offen<br>noch offen</div>`;
+  return `<div class="meta" style="justify-content:center">${fmtDate(m)} · #${m.matchNo||m.fixtureId}</div>
   <div class="finalTeams">
     ${isPlaceholder(m.home)?'<span class="qmark">?</span>':flag(m.homeFlagUrl,m.home)}
     ${isPlaceholder(m.away)?'<span class="qmark">?</span>':flag(m.awayFlagUrl,m.away)}
   </div>
-  <div class="status">${esc(m.home)}<br>${esc(m.away)}<br>${scoreText(m)}</div>`;
+  <div class="finalNames">${esc(shorten(m.home))}<br>${esc(shorten(m.away))}</div>
+  <div class="status ${statusClass(m)}">${scoreText(m)} · ${esc(m.statusText||"Geplant")}</div>`;
 }
 function render(matches){
   const r32=matches.filter(m=>roundName(m.group)==="R32").sort((a,b)=>matchDate(a)-matchDate(b));
   const r16=matches.filter(m=>roundName(m.group)==="R16").sort((a,b)=>matchDate(a)-matchDate(b));
   const qf=matches.filter(m=>roundName(m.group)==="QF").sort((a,b)=>matchDate(a)-matchDate(b));
-  const sf=matches.filter(m=>roundName(m.group)==="SF").sort((a,b)=>matchDate(a)-matchDate(b));
   const third=matches.find(m=>roundName(m.group)==="THIRD");
   const final=matches.find(m=>roundName(m.group)==="FINAL");
 
-  document.getElementById("left32").innerHTML=r32.slice(0,8).map(m=>slot(m,false)).join("");
-  document.getElementById("right32").innerHTML=r32.slice(8,16).map(m=>slot(m,true)).join("");
-  document.getElementById("left16").innerHTML=r16.slice(0,4).map(m=>slot(m,false)).join("");
-  document.getElementById("right16").innerHTML=r16.slice(4,8).map(m=>slot(m,true)).join("");
-  document.getElementById("leftQ").innerHTML=qf.slice(0,2).map(m=>slot(m,false)).join("");
-  document.getElementById("rightQ").innerHTML=qf.slice(2,4).map(m=>slot(m,true)).join("");
+  document.getElementById("left32").innerHTML=r32.slice(0,8).map(m=>slot(m,false,"connectorR")).join("");
+  document.getElementById("right32").innerHTML=r32.slice(8,16).map(m=>slot(m,true,"connectorL")).join("");
+  document.getElementById("left16").innerHTML=r16.slice(0,4).map(m=>slot(m,false,"connectorR")).join("");
+  document.getElementById("right16").innerHTML=r16.slice(4,8).map(m=>slot(m,true,"connectorL")).join("");
+  document.getElementById("leftQ").innerHTML='<div class="semiLabelL">Halbfinale</div>'+qf.slice(0,2).map(m=>slot(m,false,"connectorR")).join("");
+  document.getElementById("rightQ").innerHTML=qf.slice(2,4).map(m=>slot(m,true,"connectorL")).join("");
   document.getElementById("finalBox").innerHTML=centerSlot(final);
   document.getElementById("thirdBox").innerHTML=centerSlot(third);
 }
@@ -193,13 +265,12 @@ async function load(){
     const data=await res.json();
     if(data.serverNow)serverTimeOffsetMs=new Date(data.serverNow).getTime()-Date.now();
     render((data.matches||[]).sort((a,b)=>matchDate(a)-matchDate(b)));
-    const warn=data.warning?` · Hinweis: ${data.warning}`:"";
+    const warn=data.warning?` · ${data.warning}`:"";
     status.textContent=`Stand: ${new Intl.DateTimeFormat("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Berlin"}).format(getSyncedNow())} · Quelle: ${data.source||"Spielplan"}${warn}`;
   }catch(err){status.textContent="Fehler beim Laden: "+(err.message||err)}
 }
 document.getElementById("refreshBtn").onclick=load;
-load();
-setInterval(load,60000);
+load();setInterval(load,60000);
 </script>
 </body>
 </html>

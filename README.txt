@@ -41,3 +41,9 @@ Turnierbaum-Update:
 - /turnier.html jetzt im Sky-ähnlichen K.O.-Baum-Look
 - Runde der letzten 32 links/rechts, Achtelfinale, Viertelfinale, Halbfinale, Finale und Spiel um Platz 3
 - Ergebnisse aus API oder Handeingabe werden übernommen
+
+
+Turnierbaum angepasst:
+- schönerer 1920x1080 TV-Look
+- bessere Abstände und Skalierung auf Bildschirmgröße
+- kompaktere Namen, bessere Linien und Finale mittig
